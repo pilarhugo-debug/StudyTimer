@@ -1,0 +1,407 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; }
+  #app {
+    min-height: 100vh;
+    background: #fce4ec;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    font-family: 'Nunito', sans-serif;
+  }
+  .card {
+    background: #fff0f5;
+    border-radius: 32px;
+    border: 2px solid #f8bbd0;
+    padding: 2.5rem 2rem 2rem;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 24px #f48fb144;
+  }
+  .title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #c2185b;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.5px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: #f06292;
+    margin-bottom: 1.75rem;
+    font-weight: 600;
+  }
+  .timer-display {
+    background: #fce4ec;
+    border-radius: 24px;
+    border: 2px solid #f8bbd0;
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .time-big {
+    font-size: 64px;
+    font-weight: 800;
+    color: #ad1457;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .time-label {
+    font-size: 12px;
+    color: #f48fb1;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .sessions-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1.75rem;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 800;
+    color: #c2185b;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #f06292;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .divider {
+    width: 1.5px;
+    background: #f8bbd0;
+    border-radius: 2px;
+    align-self: stretch;
+    margin: 4px 0;
+  }
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .btn {
+    border: none;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    border-radius: 50px;
+    transition: transform 0.1s, background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn-main {
+    background: #e91e8c;
+    color: #fff;
+    padding: 13px 36px;
+    font-size: 16px;
+    box-shadow: 0 2px 12px #e91e8c55;
+  }
+  .btn-main:hover { background: #c2185b; }
+  .btn-main.paused { background: #f06292; }
+  .btn-secondary {
+    background: #fce4ec;
+    color: #c2185b;
+    padding: 13px 18px;
+    border: 1.5px solid #f8bbd0;
+  }
+  .btn-secondary:hover { background: #fce4ec; border-color: #e91e8c; }
+  .log-section {
+    border-top: 1.5px solid #f8bbd0;
+    padding-top: 1.25rem;
+    margin-top: 0.25rem;
+  }
+  .log-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #f06292;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 140px;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+  .log-item {
+    background: #fce4ec;
+    border-radius: 12px;
+    padding: 8px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #ad1457;
+    font-weight: 600;
+  }
+  .log-item span.tag {
+    background: #f8bbd0;
+    color: #c2185b;
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .deco {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0.45;
+    pointer-events: none;
+    user-select: none;
+  }
+  .pulse {
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .empty-log {
+    font-size: 13px;
+    color: #f48fb1;
+    font-weight: 600;
+    padding: 0.5rem 0;
+  }
+  .subject-input {
+    width: 100%;
+    border: 1.5px solid #f8bbd0;
+    border-radius: 50px;
+    padding: 10px 18px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #c2185b;
+    background: #fff0f5;
+    outline: none;
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
+  .subject-input::placeholder { color: #f48fb1; }
+  .subject-input:focus { border-color: #e91e8c; }
+  .btn-fullscreen {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: #fce4ec;
+    border: 1.5px solid #f8bbd0;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #e91e8c;
+    font-size: 16px;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .btn-fullscreen:hover { background: #f8bbd0; border-color: #e91e8c; }
+  .btn-fullscreen:active { transform: scale(0.92); }
+  .card { position: relative; }
+</style>
+
+<div id="app">
+  <div class="card">
+    <button class="btn-fullscreen" onclick="toggleFullscreen()" id="btn-fs" title="Pantalla completa">⛶</button>
+    <div class="title">study timer</div>
+    <div class="subtitle">¡tú puedes! ✿</div>
+
+    <input class="subject-input" id="subject" type="text" placeholder="¿qué estás estudiando? ♡" maxlength="40" />
+
+    <div class="timer-display">
+      <div class="deco" style="top:10px;left:14px">✿</div>
+      <div class="deco" style="bottom:10px;right:14px">♡</div>
+      <div class="time-big" id="display">00:00:00</div>
+      <div class="time-label" id="status-label">lista para empezar</div>
+    </div>
+
+    <div class="sessions-row">
+      <div class="stat">
+        <span class="stat-num" id="sessions-count">0</span>
+        <span class="stat-label">sesiones</span>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <span class="stat-num" id="total-today">0:00</span>
+        <span class="stat-label">total hoy</span>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <span class="stat-num" id="longest">0:00</span>
+        <span class="stat-label">más larga</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-main" id="btn-start" onclick="handleStart()">
+        <i class="ti ti-player-play" aria-hidden="true"></i> iniciar
+      </button>
+      <button class="btn btn-secondary" id="btn-reset" onclick="handleReset()" title="Reiniciar sesión">
+        <i class="ti ti-refresh" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="log-section">
+      <div class="log-title">historial ✦</div>
+      <div class="log-list" id="log-list">
+        <div class="empty-log" id="empty-msg">tus sesiones aparecerán aquí ♡</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────────
+let running = false;
+let interval = null;
+let sessions = [];
+let totalTodayBase = 0;   // accumulated seconds from finished/paused runs today
+
+// Timestamp-based tracking (survives tab-switch throttling)
+let runStartTs = null;    // Date.now() when current run started
+let pausedSeconds = 0;    // seconds accumulated before current run
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function formatTime(s) {
+  s = Math.max(0, Math.floor(s));
+  return `${pad(Math.floor(s/3600))}:${pad(Math.floor((s%3600)/60))}:${pad(s%60)}`;
+}
+
+function formatShort(s) {
+  s = Math.floor(s);
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
+  return h > 0 ? `${h}:${pad(m)}h` : `${m}:${pad(s%60)}`;
+}
+
+// Current elapsed seconds for the active session
+function currentSeconds() {
+  if (!running) return pausedSeconds;
+  return pausedSeconds + (Date.now() - runStartTs) / 1000;
+}
+
+// Total seconds studied today (finished sessions + current session)
+function currentTotalToday() {
+  return totalTodayBase + (running ? (Date.now() - runStartTs) / 1000 : 0);
+}
+
+// ── UI updates ────────────────────────────────────────────────────────────────
+function tick() {
+  document.getElementById('display').textContent = formatTime(currentSeconds());
+  document.getElementById('total-today').textContent = formatShort(currentTotalToday());
+}
+
+function updateStats() {
+  document.getElementById('sessions-count').textContent = sessions.length;
+  document.getElementById('total-today').textContent = formatShort(currentTotalToday());
+  const longest = sessions.length ? Math.max(...sessions.map(s => s.duration)) : 0;
+  document.getElementById('longest').textContent = formatShort(longest);
+}
+
+// ── Controls ──────────────────────────────────────────────────────────────────
+function handleStart() {
+  const btn = document.getElementById('btn-start');
+  if (!running) {
+    // Start or resume
+    running = true;
+    runStartTs = Date.now();
+    interval = setInterval(tick, 500); // 500ms for smooth display
+    btn.innerHTML = '⏸ pausar';
+    btn.classList.add('paused');
+    document.getElementById('status-label').innerHTML = '<span class="pulse">● estudiando</span>';
+  } else {
+    // Pause
+    pausedSeconds += (Date.now() - runStartTs) / 1000;
+    running = false;
+    clearInterval(interval);
+    btn.innerHTML = '▶ continuar';
+    btn.classList.remove('paused');
+    document.getElementById('status-label').textContent = 'en pausa ♡';
+  }
+}
+
+function handleReset() {
+  const secs = Math.floor(currentSeconds());
+  if (secs > 3) {
+    const subj = document.getElementById('subject').value.trim() || 'estudio';
+    const timeStr = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    sessions.unshift({ subject: subj, duration: secs, time: timeStr });
+    totalTodayBase += running ? (Date.now() - runStartTs) / 1000 : pausedSeconds - (totalTodayBase > 0 ? 0 : 0);
+    // Simpler: add the session duration to today's base directly
+    totalTodayBase = currentTotalToday(); // lock it in
+  }
+
+  running = false;
+  clearInterval(interval);
+  pausedSeconds = 0;
+  runStartTs = null;
+
+  document.getElementById('display').textContent = '00:00:00';
+  const btn = document.getElementById('btn-start');
+  btn.innerHTML = '▶ iniciar';
+  btn.classList.remove('paused');
+  document.getElementById('status-label').textContent = 'lista para empezar';
+  renderLog();
+}
+
+function renderLog() {
+  const list = document.getElementById('log-list');
+  if (sessions.length === 0) {
+    list.innerHTML = '<div class="empty-log" id="empty-msg">tus sesiones aparecerán aquí ♡</div>';
+    return;
+  }
+  list.innerHTML = sessions.slice(0, 8).map(s => `
+    <div class="log-item">
+      <span>${s.subject}</span>
+      <span class="tag">${formatShort(s.duration)}</span>
+    </div>
+  `).join('');
+  updateStats();
+}
+
+// ── Fullscreen ────────────────────────────────────────────────────────────────
+function toggleFullscreen() {
+  const btn = document.getElementById('btn-fs');
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+    btn.textContent = '✕';
+    btn.title = 'Salir de pantalla completa';
+  } else {
+    document.exitFullscreen();
+    btn.textContent = '⛶';
+    btn.title = 'Pantalla completa';
+  }
+}
+
+document.addEventListener('fullscreenchange', () => {
+  const btn = document.getElementById('btn-fs');
+  if (!document.fullscreenElement) {
+    btn.textContent = '⛶';
+    btn.title = 'Pantalla completa';
+  }
+});
+</script>
